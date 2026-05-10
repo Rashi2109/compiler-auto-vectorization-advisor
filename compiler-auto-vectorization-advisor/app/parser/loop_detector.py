@@ -1,7 +1,25 @@
 from clang import cindex
+import platform
 
-# Set the library path for libclang on macOS
-cindex.conf.set_library_file('/opt/homebrew/opt/llvm/lib/libclang.dylib')
+# -----------------------------------
+# LIBCLANG CONFIGURATION
+# -----------------------------------
+
+system_name = platform.system()
+
+# macOS
+if system_name == "Darwin":
+
+    cindex.Config.set_library_file(
+        "/opt/homebrew/opt/llvm/lib/libclang.dylib"
+    )
+
+# Linux (GitHub Actions)
+elif system_name == "Linux":
+
+    cindex.Config.set_library_file(
+        "/usr/lib/llvm-14/lib/libclang.so.1"
+    )
 
 class LoopDetector:
 
