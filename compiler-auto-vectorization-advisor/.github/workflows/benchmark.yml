@@ -29,7 +29,7 @@ jobs:
           python-version: "3.11"
 
       # --------------------------------
-      # INSTALL LLVM + GCC
+      # INSTALL GCC + LLVM
       # --------------------------------
       - name: Install Compilers
         run: |
@@ -37,7 +37,7 @@ jobs:
           sudo apt install -y clang gcc llvm
 
       # --------------------------------
-      # INSTALL PYTHON DEPENDENCIES
+      # INSTALL PYTHON PACKAGES
       # --------------------------------
       - name: Install Python Packages
         run: |
@@ -46,6 +46,7 @@ jobs:
           pip install matplotlib
           pip install scikit-learn
           pip install clang
+          pip install libclang
 
       # --------------------------------
       # CREATE REQUIRED FOLDERS
@@ -56,18 +57,9 @@ jobs:
           mkdir -p static/reports
 
       # --------------------------------
-      # RUN PROJECT
+      # RUN AUTOMATION PIPELINE
       # --------------------------------
-      - name: Run Benchmark System
+      - name: Run Automation Pipeline
         run: |
-          python main.py
-
-      # --------------------------------
-      # UPLOAD GENERATED REPORTS
-      # --------------------------------
-      - name: Upload Graph Reports
-        uses: actions/upload-artifact@v4
-
-        with:
-          name: benchmark-reports
-          path: static/reports/
+          cd compiler-auto-vectorization-advisor
+          python automation_runner.py
