@@ -19,21 +19,14 @@ if system_name == "Darwin":
         "/usr/local/opt/llvm/lib/libclang.dylib"
     ]
 
-# Linux
+# Linux (GitHub Actions / Ubuntu)
 elif system_name == "Linux":
 
     possible_paths = [
 
-        "/usr/lib/llvm-14/lib/libclang.so.1",
-
-        "/usr/lib/llvm-15/lib/libclang.so.1",
-
-        "/usr/lib/llvm-16/lib/libclang.so.1",
-
-        "/usr/lib/x86_64-linux-gnu/libclang-14.so.1",
-
-        "/usr/lib/x86_64-linux-gnu/libclang-15.so.1"
+        "/usr/lib/llvm-14/lib/libclang.so.1"
     ]
+
 
 # -----------------------------------
 # AUTO DETECT LIBCLANG
@@ -130,6 +123,6 @@ class LoopDetector:
 
             return "".join(lines[start:end])
 
-        except:
+        except Exception as e:
 
-            return "Source code unavailable"
+            return f"Source code unavailable: {e}"
