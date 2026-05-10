@@ -11,7 +11,7 @@ from app.ML.ml_predictor import MLPredictor
 from app.ML.feature_extractor import FeatureExtractor
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="app/templates", static_folder="static")
 
 # -----------------------------------
 # CONFIGURATION

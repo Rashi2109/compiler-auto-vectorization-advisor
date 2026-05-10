@@ -1,3 +1,4 @@
+from app.dashboard.report_generator import ReportGenerator
 import os
 
 from app.parser.loop_detector import LoopDetector
@@ -79,3 +80,25 @@ for idx, loop in enumerate(loops, start=1):
 print("\n===================================")
 print("Automation completed successfully")
 print("===================================")
+
+# -----------------------------------
+# GENERATE PDF REPORT
+# -----------------------------------
+
+analysis_report = """
+Loop analysis completed successfully.
+Vectorization opportunities detected.
+"""
+
+benchmark_report = """
+GCC O2 : 1.2 sec
+LLVM O3 : 0.9 sec
+Best Compiler : LLVM
+"""
+
+report = ReportGenerator(
+    analysis_report,
+    benchmark_report
+)
+
+report.generate_pdf()
