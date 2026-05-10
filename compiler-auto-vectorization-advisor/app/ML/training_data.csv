@@ -1,0 +1,11 @@
+dependency,loop_size,array_accesses,best_option
+0,100,3,clang_O3
+0,1000,3,clang_Ofast
+0,8,2,gcc_O2
+1,100,2,gcc_O1
+1,1000,2,gcc_O1
+0,5000,5,clang_Ofast
+0,50,3,gcc_O3
+1,50,2,gcc_O1
+0,10000,6,clang_Ofast
+0,500,4,clang_O3

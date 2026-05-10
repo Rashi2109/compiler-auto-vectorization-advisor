@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Analysis Results</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #f4f4f4;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        img {
+            width: 700px;
+            margin-top: 20px;
+        }
+
+        pre {
+            background: #eee;
+            padding: 15px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Optimization Analysis Results</h1>
+
+    <h2>Loop Analysis</h2>
+
+    <pre>{{ analysis }}</pre>
+
+    <h2>Benchmark Results</h2>
+
+    <pre>{{ benchmark }}</pre>
+
+    <h2>Execution Time Comparison</h2>
+
+    <img src="/static/reports/execution_time_comparison.png">
+
+    <h2>Speedup Analysis</h2>
+
+    <img src="/static/reports/speedup_analysis.png">
+
+</div>
+
+</body>
+
+</html>
