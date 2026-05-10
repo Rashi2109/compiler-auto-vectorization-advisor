@@ -1,0 +1,44 @@
+name: Compiler Optimization Benchmark
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  benchmark:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+
+        with:
+          python-version: "3.11"
+
+      - name: Install Compilers
+        run: |
+          sudo apt update
+          sudo apt install -y clang gcc llvm
+
+      - name: Install Python Packages
+        run: |
+          pip install flask
+          pip install pandas
+          pip install matplotlib
+          pip install scikit-learn
+
+      - name: Create Required Folders
+        run: |
+          mkdir -p uploads
+          mkdir -p static/reports
+
+      - name: Run Project
+        run: |
+          python main.py
