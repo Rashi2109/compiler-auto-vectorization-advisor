@@ -1,0 +1,73 @@
+name: Compiler Optimization Benchmark
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  benchmark:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # --------------------------------
+      # CHECKOUT REPOSITORY
+      # --------------------------------
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # --------------------------------
+      # SETUP PYTHON
+      # --------------------------------
+      - name: Setup Python
+        uses: actions/setup-python@v5
+
+        with:
+          python-version: "3.11"
+
+      # --------------------------------
+      # INSTALL LLVM + GCC
+      # --------------------------------
+      - name: Install Compilers
+        run: |
+          sudo apt update
+          sudo apt install -y clang gcc llvm
+
+      # --------------------------------
+      # INSTALL PYTHON DEPENDENCIES
+      # --------------------------------
+      - name: Install Python Packages
+        run: |
+          pip install flask
+          pip install pandas
+          pip install matplotlib
+          pip install scikit-learn
+          pip install clang
+
+      # --------------------------------
+      # CREATE REQUIRED FOLDERS
+      # --------------------------------
+      - name: Create Required Folders
+        run: |
+          mkdir -p uploads
+          mkdir -p static/reports
+
+      # --------------------------------
+      # RUN PROJECT
+      # --------------------------------
+      - name: Run Benchmark System
+        run: |
+          python main.py
+
+      # --------------------------------
+      # UPLOAD GENERATED REPORTS
+      # --------------------------------
+      - name: Upload Graph Reports
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: benchmark-reports
+          path: static/reports/
