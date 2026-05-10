@@ -13,20 +13,32 @@ jobs:
 
     steps:
 
+      # --------------------------------
+      # CHECKOUT REPOSITORY
+      # --------------------------------
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # --------------------------------
+      # SETUP PYTHON
+      # --------------------------------
       - name: Setup Python
         uses: actions/setup-python@v5
 
         with:
           python-version: "3.11"
 
+      # --------------------------------
+      # INSTALL GCC + LLVM
+      # --------------------------------
       - name: Install Compilers
         run: |
           sudo apt update
           sudo apt install -y clang gcc llvm
 
+      # --------------------------------
+      # INSTALL PYTHON PACKAGES
+      # --------------------------------
       - name: Install Python Packages
         run: |
           pip install flask
@@ -34,11 +46,18 @@ jobs:
           pip install matplotlib
           pip install scikit-learn
 
+      # --------------------------------
+      # CREATE REQUIRED FOLDERS
+      # --------------------------------
       - name: Create Required Folders
         run: |
           mkdir -p uploads
           mkdir -p static/reports
 
+      # --------------------------------
+      # RUN PROJECT
+      # --------------------------------
       - name: Run Project
         run: |
+          cd compiler-auto-vectorization-advisor
           python main.py
