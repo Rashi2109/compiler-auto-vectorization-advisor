@@ -1,5 +1,6 @@
 from clang import cindex
 import platform
+import os
 
 # -----------------------------------
 # LIBCLANG CONFIGURATION
@@ -10,81 +11,39 @@ system_name = platform.system()
 # macOS
 if system_name == "Darwin":
 
-    cindex.Config.set_library_file(
-        "/opt/homebrew/opt/llvm/lib/libclang.dylib"
-    )
+    possible_paths = [
 
-# Linux (GitHub Actions)
+        "/opt/homebrew/opt/llvm/lib/libclang.dylib",
+
+        "/usr/local/opt/llvm/lib/libclang.dylib"
+    ]
+
+# Linux (GitHub Actions / Ubuntu)
 elif system_name == "Linux":
 
-    cindex.Config.set_library_file(
-        "/usr/lib/llvm-14/lib/libclang.so.1"
-    )
+    possible_paths = [
 
-class LoopDetector:
+        "/usr/lib/llvm-14/lib/libclang.so.1",
 
-    def __init__(self, file_path):
-        self.file_path = file_path
-        self.loops = []
-        self.file_content = None
+        "/usr/lib/llvm-15/lib/libclang.so.1",
 
-    def detect_loops(self):
+        "/usr/lib/llvm-16/lib/libclang.so.1",
 
-        # Read file content
-        with open(self.file_path, 'r') as f:
-            self.file_content = f.readlines()
+        "/usr/lib/x86_64-linux-gnu/libclang-14.so.1",
 
-        # Create Clang Index
-        index = cindex.Index.create()
+        "/usr/lib/x86_64-linux-gnu/libclang-15.so.1"
+    ]
 
-        # Parse C file
-        translation_unit = index.parse(self.file_path)
+# -----------------------------------
+# AUTO DETECT VALID PATH
+# -----------------------------------
 
-        # Traverse AST
-        self.traverse_ast(translation_unit.cursor)
+for path in possible_paths:
 
-        return self.loops
+    if os.path.exists(path):
 
-    def get_loop_code(self, node):
-        """Extract the code of the loop"""
-        start_line = node.location.line - 1
-        end_line = node.extent.end.line
+        cindex.Config.set_library_file(path)
 
-        if self.file_content and start_line < len(self.file_content):
-            code_lines = self.file_content[start_line:end_line]
-            return ''.join(code_lines).strip()
-        return ""
+        print(f"Using libclang: {path}")
 
-    def traverse_ast(self, node):
-
-        # Detect FOR loops
-        if node.kind == cindex.CursorKind.FOR_STMT:
-
-            loop_code = self.get_loop_code(node)
-
-            loop_info = {
-                "type": "for",
-                "line": node.location.line,
-                "column": node.location.column,
-                "code": loop_code
-            }
-
-            self.loops.append(loop_info)
-
-        # Detect WHILE loops
-        elif node.kind == cindex.CursorKind.WHILE_STMT:
-
-            loop_code = self.get_loop_code(node)
-
-            loop_info = {
-                "type": "while",
-                "line": node.location.line,
-                "column": node.location.column,
-                "code": loop_code
-            }
-
-            self.loops.append(loop_info)
-
-        # Recursively traverse children
-        for child in node.get_children():
-            self.traverse_ast(child)
+        break
