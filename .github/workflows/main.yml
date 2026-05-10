@@ -29,15 +29,18 @@ jobs:
           python-version: "3.11"
 
       # --------------------------------
-      # INSTALL LLVM 14
+      # INSTALL LLVM 14 + GCC
       # --------------------------------
-      - name: Install LLVM
+      - name: Install LLVM and GCC
         run: |
           sudo apt update
+
           sudo apt install -y \
             llvm-14 \
             clang-14 \
-            libclang-14-dev
+            libclang-14-dev \
+            gcc \
+            g++
 
       # --------------------------------
       # INSTALL PYTHON PACKAGES
@@ -57,7 +60,10 @@ jobs:
       - name: Create Required Folders
         run: |
           mkdir -p compiler-auto-vectorization-advisor/uploads
+
           mkdir -p compiler-auto-vectorization-advisor/static/reports
+
+          mkdir -p compiler-auto-vectorization-advisor/static/graphs
 
       # --------------------------------
       # RUN AUTOMATION PIPELINE
@@ -65,16 +71,18 @@ jobs:
       - name: Run Automation Pipeline
         run: |
           cd compiler-auto-vectorization-advisor
+
           python automation_runner.py
 
       # --------------------------------
-      # UPLOAD REPORTS
+      # UPLOAD REPORTS + GRAPHS
       # --------------------------------
-      - name: Upload Reports
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
 
         with:
-          name: optimization-reports
+          name: optimization-results
 
           path: |
             compiler-auto-vectorization-advisor/static/reports/
+            compiler-auto-vectorization-advisor/static/graphs/
