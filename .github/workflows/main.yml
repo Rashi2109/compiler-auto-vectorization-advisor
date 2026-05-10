@@ -57,9 +57,9 @@ jobs:
           mkdir -p static/reports
 
       # --------------------------------
-      # RUN PROJECT
+      # RUN AUTOMATION PIPELINE
       # --------------------------------
-      - name: Run Project
+      - name: Run Automation Pipeline
         run: |
           cd compiler-auto-vectorization-advisor
-          python main.py
+          python automation_runner.py
