@@ -29,12 +29,15 @@ jobs:
           python-version: "3.11"
 
       # --------------------------------
-      # INSTALL GCC + LLVM
+      # INSTALL LLVM 14
       # --------------------------------
-      - name: Install Compilers
+      - name: Install LLVM
         run: |
           sudo apt update
-          sudo apt install -y clang gcc llvm
+          sudo apt install -y \
+            llvm-14 \
+            clang-14 \
+            libclang-14-dev
 
       # --------------------------------
       # INSTALL PYTHON PACKAGES
@@ -45,8 +48,7 @@ jobs:
           pip install pandas
           pip install matplotlib
           pip install scikit-learn
-          pip install clang
-          pip install libclang
+          pip install clang==14.0
 
       # --------------------------------
       # CREATE REQUIRED FOLDERS
